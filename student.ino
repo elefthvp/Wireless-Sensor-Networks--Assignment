@@ -87,11 +87,11 @@ void loop() {
 void environment_conditions(){
   float temperature;
   float humidity;
-  float lighting;
+  float airquality;
   
   string temp;
   string hum;
-  string light;
+  string airq;
   
   uint8_t buf[RF22_ROUTER_MAX_MESSAGE_LEN];
   char incoming[RF22_ROUTER_MAX_MESSAGE_LEN];
@@ -112,20 +112,20 @@ void environment_conditions(){
           hum = strcat(hum,incoming[i])
         }
         else{
-          light = strcat(light,incoming[i])
+          airq = strcat(airq,incoming[i])
         }
   }
       
   temperature=atof((char*)temp);
   humidity=atof((char*)hum);
-  lighting=atof((char*)lighting);
+  airquality=atof((char*) airq);
 
   Serial.println("Classroom temperature is:");
   Serial.println(temperature);
   Serial.println("Classroom humidity is:");
   Serial.println(humidity);
-  Serial.println("Classroom lighting is:");
-  Serial.println(lighting);
+  Serial.println("Classroom Air Quality is:");
+  Serial.println(airquality);
 
   return;
 }
