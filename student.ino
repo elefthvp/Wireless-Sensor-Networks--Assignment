@@ -89,6 +89,10 @@ void environment_conditions(){
   float humidity;
   float lighting;
   
+  string temp;
+  string hum;
+  string light;
+  
   uint8_t buf[RF22_ROUTER_MAX_MESSAGE_LEN];
   char incoming[RF22_ROUTER_MAX_MESSAGE_LEN];
   memset(buf, '\0', RF22_ROUTER_MAX_MESSAGE_LEN);
@@ -98,32 +102,32 @@ void environment_conditions(){
   memset(buf, '\0', RF22_ROUTER_MAX_MESSAGE_LEN);
   memset(incoming, '\0', RF22_ROUTER_MAX_MESSAGE_LEN);
   
-  int i=0;
-  while(i<3){
-  if (rf22.recvfromAck(buf, &len, &from))
-  {
-    buf[RF22_ROUTER_MAX_MESSAGE_LEN - 1] = '\0';
-    memcpy(incoming, buf, RF22_ROUTER_MAX_MESSAGE_LEN);
-    i++;
-    if(i==1){
-        temperature=atof((char*)incoming); //infinite loop until data received 
-        
-    }else if(i==2){
-        humidity=atof((char*)incoming); //infinite loop until data received 
-      }
-     else{
-        lighting=atof((char*)incoming); //infinite loop until data received 
-      }
-      }
-      }
-      Serial.println("Classroom temperature is:");
-      Serial.println(temperature);
-      Serial.println("Classroom humidity is:");
-      Serial.println(humidity);
-      Serial.println("Classroom lighting is:");
-      Serial.println(lighting);
+  if (rf22.recvfromAck(buf, &len, &from)){
+      buf[RF22_ROUTER_MAX_MESSAGE_LEN - 1] = '\0';
+      memcpy(incoming, buf, RF22_ROUTER_MAX_MESSAGE_LEN);
+      for(i=1;i<=23;i++){
+        if(i<=7)
+          temp = strcat(temp,incoming[i])
+        else if(i<=15){
+          hum = strcat(hum,incoming[i])
+        }
+        else{
+          light = strcat(light,incoming[i])
+        }
+  }
+      
+  temperature=atof((char*)temp);
+  humidity=atof((char*)hum);
+  lighting=atof((char*)lighting);
 
-      return;
+  Serial.println("Classroom temperature is:");
+  Serial.println(temperature);
+  Serial.println("Classroom humidity is:");
+  Serial.println(humidity);
+  Serial.println("Classroom lighting is:");
+  Serial.println(lighting);
+
+  return;
 }
 
 
